@@ -12,7 +12,12 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor:'#fff',
-        padding: 15,
+    },
+    padding: {
+        padding: 15
+    },
+    backgroundWhite:{
+        backgroundColor: '#fff'
     },
     text: {
         color: 'rgb(0,100,0)', //'#000',
@@ -37,7 +42,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 42,
-        width: 300,
+        width: 'auto',
         marginVertical: 6,
         borderWidth: 1,
         padding: 10,
@@ -56,12 +61,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: color.primaryColor,
         padding: 10,
-        margin: 4,
+        marginVertical: 4,
         width: 'auto',
-        borderRadius: 10
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: color.primaryColor
     },
     disableColor: {
-        backgroundColor: color.disableColor
+        backgroundColor: color.disableColor,
+        borderColor: color.disableColor
     }
 });
 

@@ -8,10 +8,42 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import styles, {color} from './components/styles';
-import {AuthScene} from './components/AuthScene';
 import { supabase } from './lib/supabase';
-import DashboardScene from './components/DashboardScene';
-import LoginScene from './components/LoginScene';
+import DashboardScreen from './components/DashboardScreen';
+import ForgetPasswordScreen from './components/ForgetPasswordScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ForgetPassword from './components/ForgetPasswordScreen';
+import RegisterScreen from './components/RegisterScreen';
+import LoginScreen from './components/LoginScreen';
+
+const Stack = createNativeStackNavigator()
+
+
+function GuestScreen(){
+  return (
+      <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='Login' component={LoginScreen} options={{headerShown: false}} />
+            <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen} />
+            <Stack.Screen name='Register' component={RegisterScreen} />
+        </Stack.Navigator>
+    </NavigationContainer>
+    )
+}
+
+function UserScreen({session}){
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+          <Stack.Screen name='Dashboard'>
+            {(props) => <DashboardScreen {...props} key={session?.user?.id} session={session} /> }
+          </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
 
 function App() {
   const [session, setSession] = useState(null);
@@ -22,21 +54,17 @@ function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
     })
-  
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
+    console.log('my_session =>', session)
   }, [])
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={color.statusBarColor} barStyle={'light-content'}/>
-      <View style={{flex:1}}>
-        {!session ? 
-          <LoginScene />: 
-          <DashboardScene key={session.user.id} session={session} />
-        }
-      </View>
+        <StatusBar backgroundColor={color.statusBarColor} barStyle={'light-content'}/>
+        {!session ? <GuestScreen /> : <UserScreen session={session} /> }
     </SafeAreaView>
   );
 }

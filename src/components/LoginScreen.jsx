@@ -1,0 +1,110 @@
+import {ScrollView,  View, Image, Text, TextInput, TouchableOpacity, Alert, Modal } from 'react-native'
+import React, {useState, useRef} from 'react'
+import styles, {color} from './styles'
+import {useFormik} from 'formik'
+import { supabase } from '../lib/supabase'
+import * as Yup from 'yup'
+import LoadingModal from './LoadingModal'
+
+const loginSchema = Yup.object({
+    email: Yup.string().email().required(),
+    password: Yup.string().min(8)
+})
+
+
+const FormLogin = ({navigation}) => {
+    const [loading, setLoading] = useState(false)
+    const passwordRef = useRef()    
+    
+    const form = useFormik({
+        initialValues: {email: '', password: ''},
+        validationSchema: loginSchema,
+        onSubmit: value => {
+            signIn(value.email, value.password)
+        }
+    })
+    
+    const invalid = (form.values.email === '' || form.values.password === ''
+    || form.errors.email || form.errors.password) 
+
+    const signIn = async (email, password) => {
+        if(invalid) return
+        console.log('process')
+        setLoading(true)
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        }) 
+        setLoading(false)
+        
+        if (error) Alert.alert('error','your email and password didn\'t match')
+    }
+
+
+    return (
+        <View>
+            <LoadingModal visible={loading} />
+
+            <Text>Email</Text>
+            <TextInput
+                maxLength={200}
+                style={styles.input}
+                onChangeText={form.handleChange('email')}
+                onSubmitEditing={()=>passwordRef.current.focus()}
+                value={form.values.email}
+                returnKeyType='next'
+            />
+            { form.values.email != '' && form.errors.email ? (
+                <Text style={styles.errorInput}>{form.errors.email}</Text>
+            ) : null }
+            <Text>Password</Text>
+            <TextInput
+                maxLength={200}
+                style={styles.input}
+                onChangeText={form.handleChange('password')}
+                value={form.values.password}
+                onSubmitEditing={form.handleSubmit}
+                secureTextEntry
+                ref={passwordRef}
+            />
+            { form.errors.password ? (
+                <Text style={styles.errorInput}>{form.errors.password}</Text>
+            ) : null }
+            <TouchableOpacity 
+                style={ invalid ? [ styles.btnPrimary, styles.disableColor] : styles.btnPrimary} 
+                onPress={form.handleSubmit} 
+                disabled={invalid ? true : false}>
+                <Text style={{color:'#fff'}}>Login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+                style={[ styles.btnPrimary, 
+                    {borderColor: color.primaryColor, backgroundColor: '#fff'}]} 
+                onPress={()=>navigation.navigate('Register')} >
+                <Text style={{color:color.primaryColor}}>Register</Text>
+            </TouchableOpacity>
+
+            <View style={{alignItems:'center', flexDirection: 'row', justifyContent: 'center'}}>
+                <Text>forget your password? </Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('ForgetPassword')}>
+                    <Text style={{color: color.primaryColor, fontWeight: 'bold'}}> Reset your password here</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
+
+export default function LoginScreen({navigation}) {
+    const logoLogin = require('../assets/logoLogin.png')    
+    const logoLoginText = require('../assets/pejalanHijau.png')
+
+    return (
+        <View style={[styles.center, styles.backgroundWhite]}>
+            <View style={[styles.centerHorizontally]}>
+                <Image source={logoLoginText} style={styles.logoLoginText} />
+                <Image source={logoLogin} style={styles.logoLogin}/>
+            </View>
+            <FormLogin navigation={navigation}/>
+        </View>
+    )
+}

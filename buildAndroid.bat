@@ -9,6 +9,14 @@ if "%1" == "" (
     cd ..
 )
 
+if "%1" == "releaseAll" (
+    cd android
+    echo build release apk for all architectures
+    gradlew assembleRelease
+    echo output: android/app/build/outputs/apk/debug/app-debug.apk
+    cd ..
+)
+
 if "%1" == "release" (
     cd android
     set appid=com.jlnr2Release
