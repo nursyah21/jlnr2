@@ -9,53 +9,8 @@ export const color = {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        backgroundColor:'#fff',
-    },
-    padding: {
-        padding: 15
-    },
     backgroundWhite:{
         backgroundColor: '#fff'
-    },
-    text: {
-        color: 'rgb(0,100,0)', //'#000',
-        fontSize: 24
-    },
-    centerHorizontally: {
-        alignItems: 'center'
-    },
-    center: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logoLoginText:{
-        height: 40,
-        width: 200,
-        resizeMode: 'stretch'
-    },
-    logoLogin: {
-        width:80,
-        height: 80
-    },
-    input: {
-        height: 42,
-        width: 'auto',
-        marginVertical: 6,
-        borderWidth: 1,
-        padding: 10,
-        color: '#000',
-        borderColor: color.borderColor,
-        borderRadius: 5
-    },
-    errorColor: {
-        color: color.errorColor,
-    },
-    errorInput: {
-        color: color.errorColor,
-        marginBottom: 4
     },
     btnPrimary: {
         alignItems: 'center',
@@ -67,10 +22,62 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: color.primaryColor
     },
+    container:{
+        flex: 1,
+        backgroundColor:'#fff',
+    },
+    centerHorizontally: {
+        alignItems: 'center'
+    },
+    center: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     disableColor: {
         backgroundColor: color.disableColor,
         borderColor: color.disableColor
-    }
+    },
+    errorColor: {
+        color: color.errorColor,
+    },
+    errorInput: {
+        color: color.errorColor,
+        marginBottom: 4
+    },
+    input: {
+        height: 42,
+        width: 'auto',
+        marginVertical: 6,
+        borderWidth: 1,
+        padding: 10,
+        color: '#000',
+        borderColor: color.borderColor,
+        borderRadius: 5
+    },
+    logoLoginText:{
+        height: 40,
+        width: 200,
+        resizeMode: 'stretch'
+    },
+    logoLogin: {
+        width:80,
+        height: 80
+    },
+    padding: {
+        padding: 15
+    },
+    tabBottom: {
+        position: 'absolute',
+        flex: 1,
+        bottom: 100,
+        height: 40,
+        backgroundColor: color.primaryColor
+    },
+    text: {
+        color: 'rgb(0,100,0)', //'#000',
+        fontSize: 24
+    },
 });
 
 export default styles

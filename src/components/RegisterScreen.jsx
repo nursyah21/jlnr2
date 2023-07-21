@@ -32,19 +32,6 @@ export default function RegisterScreen({navigation}) {
   const logoLogin = require('../assets/logoLogin.png')    
   const logoLoginText = require('../assets/pejalanHijau.png')
 
-  const signIn = async (email, password) => {
-    if(invalid) return
-    console.log('process')
-    setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-    }) 
-    setLoading(false)
-    
-    if (error) Alert.alert('error','your email and password didn\'t match')
-}
-
   const signUp = async (value=valuesSignUp) => {
       setLoading(true)
       setLoadingMessage('creating account')
@@ -82,8 +69,8 @@ export default function RegisterScreen({navigation}) {
 
   const invalid = form.values.name === '' || form.values.email === ''
     || form.values.password === '' || form.values.confirmPassword == ''
-    || form.errors.name || form.errors.email
-    || form.errors.password || form.errors.confirmPassword
+    || form.errors.name != undefined || form.errors.email != undefined
+    || form.errors.password != undefined || form.errors.confirmPassword != undefined
 
   const validColorButton = [styles.btnPrimary, {borderColor: color.primaryColor, backgroundColor: '#fff'}]
   const invalidColorButton = [styles.btnPrimary, {borderColor: color.disableColor, backgroundColor: '#eee'}]

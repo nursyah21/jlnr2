@@ -10,12 +10,11 @@ import SplashScreen from 'react-native-splash-screen'
 import styles, {color} from './components/styles';
 import { supabase } from './lib/supabase';
 import DashboardScreen from './components/DashboardScreen';
-import ForgetPasswordScreen from './components/ForgetPasswordScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ForgetPassword from './components/ForgetPasswordScreen';
 import RegisterScreen from './components/RegisterScreen';
 import LoginScreen from './components/LoginScreen';
+import ForgetPasswrodScreen from './components/ForgetPasswordScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -25,7 +24,7 @@ function GuestScreen(){
       <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name='Login' component={LoginScreen} options={{headerShown: false}} />
-            <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen} />
+            <Stack.Screen name='Forget Password'  component={ForgetPasswrodScreen} />
             <Stack.Screen name='Register' component={RegisterScreen} />
         </Stack.Navigator>
     </NavigationContainer>
@@ -37,7 +36,7 @@ function UserScreen({session}){
   return (
     <NavigationContainer>
       <Stack.Navigator>
-          <Stack.Screen name='Dashboard'>
+          <Stack.Screen name='Dashboard' options={{headerShown: false}}>
             {(props) => <DashboardScreen {...props} key={session?.user?.id} session={session} /> }
           </Stack.Screen>
       </Stack.Navigator>

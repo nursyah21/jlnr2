@@ -1,32 +1,31 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { supabase } from '../lib/supabase'
-import styles from './styles'
+import styles, { color } from './styles'
 import LoadingModal from './LoadingModal'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Dimensions } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import HomeScreen from './dashboard/HomeScreen'
 
+const Tab = createBottomTabNavigator();
 
 export default function DashboardScreen({session}) {
-  const [loading, setLoading] = useState(false)
-  const email = session?.user?.email
-  const signOut = async () => {
-    setLoading(true)
-    await supabase.auth.signOut()
-    setLoading(false)
-  }
-  useEffect(()=>{
-    console.log(session?.user?.aud)
-    console.log('user:',email)
-  }, [])
-
 
   return (
-    <View style={[styles.container, styles.padding]}>
-      <LoadingModal visible={loading} />
+    <View style={[styles.container]}>
+      <Tab.Navigator screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Ionicons name={'home'} size={size} color={color} />;
+          },
 
-      <Text>Hey, {email}</Text>
-      <TouchableOpacity style={styles.btnPrimary} onPress={signOut}>
-        <Text style={{color: 'white'}}>SignOut</Text>
-      </TouchableOpacity>
+          tabBarActiveTintColor: color.primaryColor,
+          tabBarInactiveTintColor: color.disableColor,
+        })}>
+        <Tab.Screen name="Home">
+            {(props) => <HomeScreen {...props}  key={session?.user?.id} session={session} /> }
+        </Tab.Screen>
+      </Tab.Navigator>
     </View>
   )
 }

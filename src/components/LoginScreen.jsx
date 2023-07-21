@@ -1,5 +1,5 @@
-import {ScrollView,  View, Image, Text, TextInput, TouchableOpacity, Alert, Modal } from 'react-native'
-import React, {useState, useRef} from 'react'
+import {ScrollView,  View, Image, Text, TextInput, TouchableOpacity, Alert, Modal, Dimensions } from 'react-native'
+import React, {useState, useRef, useEffect} from 'react'
 import styles, {color} from './styles'
 import {useFormik} from 'formik'
 import { supabase } from '../lib/supabase'
@@ -11,11 +11,14 @@ const loginSchema = Yup.object({
     password: Yup.string().min(8)
 })
 
+const width = Dimensions.get('screen').width * .85
+
 
 const FormLogin = ({navigation}) => {
     const [loading, setLoading] = useState(false)
     const passwordRef = useRef()    
-    
+
+
     const form = useFormik({
         initialValues: {email: '', password: ''},
         validationSchema: loginSchema,
@@ -25,7 +28,7 @@ const FormLogin = ({navigation}) => {
     })
     
     const invalid = (form.values.email === '' || form.values.password === ''
-    || form.errors.email || form.errors.password) 
+    || form.errors.email  != undefined|| form.errors.password != undefined) 
 
     const signIn = async (email, password) => {
         if(invalid) return
@@ -60,7 +63,7 @@ const FormLogin = ({navigation}) => {
             <Text>Password</Text>
             <TextInput
                 maxLength={200}
-                style={styles.input}
+                style={[styles.input, {width: width}]}
                 onChangeText={form.handleChange('password')}
                 value={form.values.password}
                 onSubmitEditing={form.handleSubmit}
@@ -85,9 +88,9 @@ const FormLogin = ({navigation}) => {
             </TouchableOpacity>
 
             <View style={{alignItems:'center', flexDirection: 'row', justifyContent: 'center'}}>
-                <Text>forget your password? </Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('ForgetPassword')}>
-                    <Text style={{color: color.primaryColor, fontWeight: 'bold'}}> Reset your password here</Text>
+                <Text>Forget your password? </Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('Forget Password')}>
+                   <Text style={{color: color.primaryColor, fontWeight: 'bold'}}> Reset Password</Text>
                 </TouchableOpacity>
             </View>
         </View>
