@@ -5,7 +5,8 @@ export const color = {
     borderColor: '#aaa',
     primaryColor: 'rgb(0,100,0)',
     disableColor: 'rgba(0,100,0,.5)',
-    errorColor: 'rgb(200,0,0)'
+    errorColor: 'rgb(200,0,0)',
+    dangerColor: 'rgb(160,0,0)',
 }
 
 const styles = StyleSheet.create({
@@ -19,8 +20,7 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         width: 'auto',
         borderRadius: 10,
-        borderWidth: 1,
-        borderColor: color.primaryColor
+        borderWidth: 0,
     },
     container:{
         flex: 1,
@@ -44,6 +44,14 @@ const styles = StyleSheet.create({
     errorInput: {
         color: color.errorColor,
         marginBottom: 4
+    },
+    imgProfile:{
+        height: 60,
+        width: 60,
+        margin: 5,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 600
     },
     input: {
         height: 42,

@@ -4,7 +4,7 @@ import LoadingModal from "../LoadingModal"
 import styles from "../styles"
 import { supabase } from "../../lib/supabase"
 
-function HomeScreen({session}){
+function SearchScreen({session}){
     const [loading, setLoading] = useState(false)
     const email = session?.user?.email
     const signOut = async () => {
@@ -16,9 +16,12 @@ function HomeScreen({session}){
     return (
       <View style={[styles.container, {padding: 10}]}>
         <LoadingModal visible={loading} />
-        <Text>Home</Text>
+        <Text>search</Text>
+        <TouchableOpacity style={styles.btnPrimary} onPress={signOut}>
+          <Text style={{color: 'white'}}>SignOut</Text>
+        </TouchableOpacity>
       </View>
     )
   }
 
-  export default HomeScreen
+  export default SearchScreen

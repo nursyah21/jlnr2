@@ -2,25 +2,9 @@ import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Alert } fro
 import React, {useState, useRef} from 'react'
 import styles, {color} from './styles'
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import LoadingModal from './LoadingModal'
 import { supabase } from '../lib/supabase'
-
-const loginSchema = Yup.object({
-  name: Yup.string().min(4).required(""),
-  email: Yup.string().email().required(),
-  password: Yup.string().min(8),
-  confirmPassword: Yup.string().test('passwords-match', 'Passwords must match', function(value){
-    return this.parent.password === value
-  }),
-})
-
-const valuesSignUp = {
-  name:"",
-  email:"",
-  password:"",
-  confirmPassword: ""
-}
+import { registerSchema, typeRegister } from '../lib/utils'
 
 export default function RegisterScreen({navigation}) {
   const [loading, setLoading] = useState(false)
@@ -32,10 +16,11 @@ export default function RegisterScreen({navigation}) {
   const logoLogin = require('../assets/logoLogin.png')    
   const logoLoginText = require('../assets/pejalanHijau.png')
 
-  const signUp = async (value=valuesSignUp) => {
+  const signUp = async (value=typeRegister) => {
       setLoading(true)
       setLoadingMessage('creating account')
       
+
       const {data: dataSignUp, error: errorSignUp} =  await supabase.auth.signUp({
         email: value.email,
         password: value.password
@@ -44,15 +29,18 @@ export default function RegisterScreen({navigation}) {
       if (errorSignUp){
         setLoading(false)
         console.log('error1', errorSignUp.message)
+        Alert.alert('error', errorSignUp.message)
+        return
       } 
-
+      
       const {error} = await supabase.from('users').insert([
-        { name: value.name, auth_id: dataSignUp.user.id }
+        { id: dataSignUp.user.id, name: value.name }
       ])
 
       if (error){
         setLoading(false)
         Alert.alert('error', error.message)
+        return
       }
       
       setLoading(false)
@@ -61,7 +49,7 @@ export default function RegisterScreen({navigation}) {
 
   const form = useFormik({
     initialValues: {name: '', email: '', password: '', confirmPassword: ''},
-    validationSchema: loginSchema,
+    validationSchema: registerSchema,
     onSubmit: value => {
           signUp(value)
     }
@@ -72,7 +60,7 @@ export default function RegisterScreen({navigation}) {
     || form.errors.name != undefined || form.errors.email != undefined
     || form.errors.password != undefined || form.errors.confirmPassword != undefined
 
-  const validColorButton = [styles.btnPrimary, {borderColor: color.primaryColor, backgroundColor: '#fff'}]
+  const validColorButton = [styles.btnPrimary, {borderColor: color.primaryColor, backgroundColor: '#fff', borderWidth: 1}]
   const invalidColorButton = [styles.btnPrimary, {borderColor: color.disableColor, backgroundColor: '#eee'}]
   let colorButton = invalid ? invalidColorButton : validColorButton
   

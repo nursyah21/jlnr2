@@ -15,6 +15,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RegisterScreen from './components/RegisterScreen';
 import LoginScreen from './components/LoginScreen';
 import ForgetPasswrodScreen from './components/ForgetPasswordScreen';
+import LoadingModal from './components/LoadingModal';
 
 const Stack = createNativeStackNavigator()
 
@@ -31,7 +32,11 @@ function GuestScreen(){
     )
 }
 
-function UserScreen({session}){
+function UserScreen({session, setLoading}){
+
+  useEffect(()=>{
+    setLoading(false)
+  },)
 
   return (
     <NavigationContainer>
@@ -45,7 +50,8 @@ function UserScreen({session}){
 }
 
 function App() {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(()=>{
     SplashScreen.hide()
@@ -56,14 +62,18 @@ function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
-    console.log('my_session =>', session)
+
+    if(session != null){
+      setLoading(true)
+    }
   }, [])
 
 
   return (
     <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={color.statusBarColor} barStyle={'light-content'}/>
-        {!session ? <GuestScreen /> : <UserScreen session={session} /> }
+        <LoadingModal visible={loading} message='sign in...'/>
+        {!session ? <GuestScreen /> : <UserScreen session={session} setLoading={setLoading} /> }
     </SafeAreaView>
   );
 }

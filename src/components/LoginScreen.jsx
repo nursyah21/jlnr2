@@ -3,16 +3,10 @@ import React, {useState, useRef, useEffect} from 'react'
 import styles, {color} from './styles'
 import {useFormik} from 'formik'
 import { supabase } from '../lib/supabase'
-import * as Yup from 'yup'
+import { loginSchema } from '../lib/utils'
 import LoadingModal from './LoadingModal'
 
-const loginSchema = Yup.object({
-    email: Yup.string().email().required(),
-    password: Yup.string().min(8)
-})
-
 const width = Dimensions.get('screen').width * .85
-
 
 const FormLogin = ({navigation}) => {
     const [loading, setLoading] = useState(false)
@@ -82,7 +76,7 @@ const FormLogin = ({navigation}) => {
 
             <TouchableOpacity 
                 style={[ styles.btnPrimary, 
-                    {borderColor: color.primaryColor, backgroundColor: '#fff'}]} 
+                    {borderColor: color.primaryColor, backgroundColor: '#fff', borderWidth: 1}]} 
                 onPress={()=>navigation.navigate('Register')} >
                 <Text style={{color:color.primaryColor}}>Register</Text>
             </TouchableOpacity>
